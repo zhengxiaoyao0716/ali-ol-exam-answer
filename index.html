@@ -1,0 +1,139 @@
+<!--  -->
+<!-- @author: zhengxiaoyao0716 -->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="Keywords" content="" />
+    <meta name="Description" content="" />
+    <link rel="shortcut icon" href="http://os.zheng0716.com/static/image/favicon.ico" />
+    <title>Title</title>
+    <style>
+    </style>
+</head>
+
+<body>
+    <div style="background: #03A9F4; width: 100%; margin-top: 150px; color: #fff; font-size: 120px; text-align: center; font-family: arial,tahoma,'Microsoft Yahei','\5b8b\4f53',sans-serif;">Click Me</div>
+
+    <!-- scripts -->
+    <div style="display: none;">
+        <script>
+            (() => {
+                function showDialog() {
+                    document.body.appendChild((() => {
+                        const style = document.createElement("style");
+                        style.innerHTML = `
+                            .modal::before {
+                                position: fixed;
+                                top: 0px;
+                                left: 0px;
+                                width: 100%;
+                                height: 100%;
+                                content: "";
+                                background: black;
+                                filter: alpha(opacity=60);
+                                opacity: 0.6;
+                            }
+                            .modal .content {
+                                position: fixed;
+                                z-index: 1;
+                                top: 24%;
+                                left: 50%;
+                                width: 50%;
+                                margin-left: -25%;
+                                color: #fff;
+                            }
+                            .modal .content .title {
+                                border-top-left-radius: 3px;
+                                border-top-right-radius: 3px;
+                                background-color: #03A9F4;
+                                color: #fff;
+                                font-size: 1.1em;
+                                padding: 20px;
+                            }
+                            .modal .content .title>a {
+                                font-style: normal;
+                                /*transform: rotateX(45deg);*/
+                                float: right;
+                                color: #fff;
+                                text-decoration: none;
+                            }
+                            .modal .content .message {
+                                background-color: #fff;
+                                color: black;
+                                padding: 20px;
+                            }
+                            .modal .content .button_bar {
+                                display: flex;
+                                justify-content: center;
+                                border-bottom-left-radius: 3px;
+                                border-bottom-right-radius: 3px;
+                                background-color: #eee;
+                                padding: 6px;
+                                color: black;
+                            }
+                            .modal .content .button_bar>a {
+                                text-decoration: none;
+                                position: relative;
+                                color: black;
+                                padding: 3px 12px;
+                                margin: 6px;
+                                border-radius: 3px;
+                            }
+                            .modal .content .button_bar>a::before {
+                                opacity: 0;
+                                -webkit-transform: scale(0);
+                                transform: scale(0);
+                                content: ""
+                            }
+                            .modal .content .button_bar>a.pos {
+                                background: #03A9F4;
+                                color: #fff;
+                            }
+                            .modal .content .button_bar>a.neg {
+                                background: #eee;
+                                color: #999;
+                                border: solid 1px #999;
+                            }
+                            .modal .content a:hover {
+                                filter: brightness(0.8);
+                            }
+                        `;
+                        return style;
+                    })());
+                    const modal = document.createElement("div");
+                    modal.classList.add("modal");
+                    document.body.appendChild(modal);
+                    const events = {dialogClose: "close", dialogCancel: "cancel", dialogConfirm: "confirm"};
+                    showDialog = function (title, message) {
+                        modal.innerHTML = `
+                            <div id="dialog" class="modal">
+                                <div class="content">
+                                    <div id="dialogTitle" class="title">${title || '对话框标题'}<a id="dialogClose" href="javascript:;">ｘ</a></div>
+                                    <div id="dialogMessageDiv" class="message">${message || '对话框的内容'}</div>
+                                    <div id="dialogButtonBar" class="button_bar">
+                                        <a id="dialogConfirm" class="pos" href="javascript:;">确认</a>
+                                        <a id="dialogCancel" class="neg" href="javascript:;">取消</a>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        modal.style.setProperty("display", "block");
+                        const promise = new Promise((resolve, reject) => {
+                            modal.querySelectorAll("a").forEach(a => a.addEventListener("click", e => {
+                                resolve(events[a.id]);
+                                modal.style.setProperty("display", "none");
+                            }));
+                        });
+                        return promise;
+                    };
+                    return showDialog.apply(this, arguments);
+                }
+                document.body.querySelector("body>div:first-child").addEventListener("click", e => showDialog().then(alert));
+            })();
+        </script>
+    </div>
+</body>
+
+</html>
